@@ -111,7 +111,3 @@ After your pull request is merged, you can delete your branch
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
-
-Made with 💜 &nbsp;by Eduardo Bernardino 👋 &nbsp;[See my linkedin](https://www.linkedin.com/in/dudubernardino/)
-
-README based on [EliasGcf](https://github.com/EliasGcf/gobarber-api) project.
