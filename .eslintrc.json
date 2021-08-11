@@ -23,9 +23,7 @@
       "import/no-unresolved": "off",
       "no-use-before-define": "off",
       "no-restricted-syntax": "off",
-      "class-methods-use-this": "off",
       "no-empty-function": "off",
-      "no-useless-constructor": "off",
       "max-classes-per-file": "off",
       "max-len": "off",
     }

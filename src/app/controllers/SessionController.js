@@ -3,7 +3,6 @@ import User from '../models/User';
 
 import AuthConfig from '../../config/auth';
 
-
 class SessionController {
   async store(req, res) {
     try {
