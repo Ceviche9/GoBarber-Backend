@@ -23,6 +23,13 @@ class User extends Model {
 
     return this;
   }
+
+  // Método para verificar se a senha que o usuário está enviando pelo req é a mesma do hash que tem no bd
+  checkPassword(password) {
+    // retorna um boolean.
+    return bcrypt.compare(password, this.password_hash);
+  }
+
 }
 
 export default User;
