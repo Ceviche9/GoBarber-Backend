@@ -4,8 +4,8 @@
         "node": true
     },
     "extends": [
-      "airbnb-base"],
-    "plugins": ["prettier"],
+        "airbnb-base"
+    ],
     "parserOptions": {
         "ecmaVersion": 12,
         "sourceType": "module"
@@ -13,17 +13,19 @@
     "rules": {
       "global-require": "off",
       "import/prefer-default-export": "off",
-      "no-unused-expressions": ["error", { "allowTaggedTemplates": true }],
+      "no-unused-expressions": ["warn", { "allowTaggedTemplates": true }],
       "no-unused-vars": "warn",
       "prefer-template": "warn",
       "no-console": "off",
       "no-plusplus": "off",
       "arrow-body-style": "off",
-      "import/extensions": "off",
+      "import/extensions": "warn",
       "import/no-unresolved": "off",
       "no-use-before-define": "off",
       "no-restricted-syntax": "off",
-      "no-empty-function": "off",
+      "class-methods-use-this": "warn",
+      "no-empty-function": "warn",
+      "no-useless-constructor": "off",
       "max-classes-per-file": "off",
       "max-len": "off",
     }

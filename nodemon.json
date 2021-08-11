@@ -1,6 +1,6 @@
 {
   "watch": ["src/"],
   "execMap": {
-    "js": "sucrase-node"
+    "js": "node -r sucrase/register"
   }
 }
