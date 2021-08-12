@@ -39,6 +39,8 @@ class UserController {
   }
 
   async update(req, res) {
+    const schemaMixed = yup.mixed();
+
     // No update nenhuma informação é obrigatória, com exceção do oldPassword
     const schema = yup.object().shape({
       name: yup.string(),
@@ -52,7 +54,12 @@ class UserController {
         ),
       confirmPassword: yup.string().when("password", (password, field) => {
         // *Não funciona*
-        password ? field.required().oneOf([yup.ref("password")]) : field;
+        password
+          ? field
+              .required()
+              .schemaMixed()
+              .onOf([yup.ref("password")])
+          : field;
       }),
     });
 
