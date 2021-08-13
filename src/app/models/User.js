@@ -1,21 +1,22 @@
-import { Model, Sequelize } from 'sequelize';
-import bcrypt from 'bcryptjs';
+import { Model, Sequelize } from "sequelize";
+import bcrypt from "bcryptjs";
 
 class User extends Model {
   static init(sequelize) {
-    super.init({
-      name: Sequelize.STRING,
-      email: Sequelize.STRING,
-      password: Sequelize.VIRTUAL,
-      password_hash: Sequelize.STRING,
-      provider: Sequelize.BOOLEAN,
-    },
-    {
-      sequelize
-    }
+    super.init(
+      {
+        name: Sequelize.STRING,
+        email: Sequelize.STRING,
+        password: Sequelize.VIRTUAL,
+        password_hash: Sequelize.STRING,
+        provider: Sequelize.BOOLEAN,
+      },
+      {
+        sequelize,
+      }
     );
 
-    this.addHook('beforeSave', async (user) => {
+    this.addHook("beforeSave", async (user) => {
       if (user.password) {
         user.password_hash = await bcrypt.hash(user.password, 8);
       }
@@ -24,12 +25,15 @@ class User extends Model {
     return this;
   }
 
+  static associate(models) {
+    this.belongsTo(models.Files, { foreignKey: "avatar_id" });
+  }
+
   // Método para verificar se a senha que o usuário está enviando pelo req é a mesma do hash que tem no bd
   checkPassword(password) {
     // retorna um boolean.
     return bcrypt.compare(password, this.password_hash);
   }
-
 }
 
 export default User;
