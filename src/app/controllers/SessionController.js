@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import * as yup from "yup";
 import User from "../models/User";
 
 import AuthConfig from "../../config/auth";
