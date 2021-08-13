@@ -11,6 +11,7 @@ import { FileController } from "./app/controllers/fileController";
 
 import { AuthMiddleware } from "./app/Middleware/auth";
 
+// Controllers
 const userController = new UserController();
 const sessionController = new SessionController();
 const fileController = new FileController();

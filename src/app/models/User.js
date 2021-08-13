@@ -16,6 +16,7 @@ class User extends Model {
       }
     );
 
+    // Para fazer o hash da senha.
     this.addHook("beforeSave", async (user) => {
       if (user.password) {
         user.password_hash = await bcrypt.hash(user.password, 8);
@@ -25,6 +26,7 @@ class User extends Model {
     return this;
   }
 
+  // Adicionando o avatar_id.
   static associate(models) {
     this.belongsTo(models.Files, { foreignKey: "avatar_id" });
   }
