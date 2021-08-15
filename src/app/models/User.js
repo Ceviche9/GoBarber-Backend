@@ -7,6 +7,7 @@ class User extends Model {
       {
         name: Sequelize.STRING,
         email: Sequelize.STRING,
+        // O campo virtual não é armazenado no BD.
         password: Sequelize.VIRTUAL,
         password_hash: Sequelize.STRING,
         provider: Sequelize.BOOLEAN,
@@ -16,7 +17,7 @@ class User extends Model {
       }
     );
 
-    // Para fazer o hash da senha.
+    // Para fazer o hash da senha antes de ser salva no BD.
     this.addHook("beforeSave", async (user) => {
       if (user.password) {
         user.password_hash = await bcrypt.hash(user.password, 8);
