@@ -16,6 +16,7 @@ class UserController {
     }
 
     try {
+      // Para verificar se o email enviado já existe.
       const userExist = await User.findOne({
         where: { email: req.body.email },
       });

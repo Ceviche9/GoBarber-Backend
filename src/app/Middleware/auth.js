@@ -17,6 +17,7 @@ export const AuthMiddleware = async (req, res, next) => {
   try {
     const { id } = await verify(token, authConfig.secret);
 
+    // Armazenado o id do usuário.
     req.userId = id;
 
     return next();
