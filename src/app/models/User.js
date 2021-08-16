@@ -29,7 +29,7 @@ class User extends Model {
 
   // Adicionando o avatar_id.
   static associate(models) {
-    this.belongsTo(models.Files, { foreignKey: "avatar_id" });
+    this.belongsTo(models.Files, { foreignKey: "avatar_id", as: "avatar" });
   }
 
   // Método para verificar se a senha que o usuário está enviando pelo req é a mesma do hash que tem no bd
