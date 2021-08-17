@@ -11,12 +11,18 @@ class AppointmentController {
   async index(req, res) {
     const { page = 1 } = req.query;
 
+    // Para listar os appointments armazenados no banco.
     const appointment = await Appointment.findAll({
       where: { user_id: req.userId, canceled_at: null },
+      // ordenando por data.
       order: ["date"],
+      // Escolhendo os atributos.
       attributes: ["id", "date"],
+      // limitando o numero de agendamentos por pagina.
       limit: 20,
+      // lógica de paginação.
       offset: (page - 1) * 20,
+      // incluindo as informações do barbeiro(provider).
       include: [
         {
           model: User,
