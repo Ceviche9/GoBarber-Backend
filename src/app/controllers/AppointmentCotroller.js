@@ -1,5 +1,5 @@
-import Appointment from "../models/Appointments";
 import * as Yup from "yup";
+import Appointment from "../models/Appointments";
 import User from "../models/User";
 
 // Controller responsável para fazer o agendamento com algum barbeiro.
