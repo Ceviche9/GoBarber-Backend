@@ -1,7 +1,5 @@
 "use strict";
 
-const sequelize = require("sequelize");
-
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable("appointments", {
@@ -34,7 +32,7 @@ module.exports = {
       },
 
       canceled_at: {
-        type: sequelize.DATE,
+        type: Sequelize.DATE,
       },
 
       created_at: {
@@ -50,6 +48,6 @@ module.exports = {
   },
 
   down: async (queryInterface) => {
-    await queryInterface.dropTable("files");
+    await queryInterface.dropTable("appointments");
   },
 };
