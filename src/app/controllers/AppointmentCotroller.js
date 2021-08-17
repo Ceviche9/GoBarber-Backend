@@ -2,9 +2,35 @@ import * as Yup from "yup";
 import { startOfHour, parseISO, isBefore } from "date-fns";
 import Appointment from "../models/Appointments";
 import User from "../models/User";
+import File from "../models/Files";
 
 // Controller responsável para fazer o agendamento com algum barbeiro.
 class AppointmentController {
+  // Para listar todos os agendamentos do usuário
+  async index(req, res) {
+    const appointment = await Appointment.findAll({
+      where: { user_id: req.userId, canceled_at: null },
+      order: ["date"],
+      attributes: ["id", "date"],
+      include: [
+        {
+          model: User,
+          as: "provider",
+          attributes: ["id", "name"],
+          include: [
+            {
+              model: File,
+              as: "avatar",
+              attributes: ["id", "path", "url"],
+            },
+          ],
+        },
+      ],
+    });
+
+    return res.json(appointment);
+  }
+
   async store(req, res) {
     // Para validar o dados enviados.
     const schema = Yup.object().shape({
@@ -47,8 +73,6 @@ class AppointmentController {
           date: hourStart,
         },
       });
-
-      console.log(checkAvailability);
 
       if (checkAvailability) {
         return res

@@ -35,6 +35,7 @@ routes.put("/users", AuthMiddleware, userController.update);
 routes.get("/providers", AuthMiddleware, providerController.index);
 
 // Appointments
+routes.get("/appointments", AuthMiddleware, appointmentController.index);
 routes.post("/appointments", AuthMiddleware, appointmentController.store);
 
 //Files
