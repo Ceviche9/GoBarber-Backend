@@ -1,6 +1,7 @@
 import * as yup from "yup";
 import User from "../models/User";
 
+// Controller do usuário.
 class UserController {
   async store(req, res) {
     // Validação dos dados.

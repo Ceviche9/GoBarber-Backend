@@ -30,7 +30,7 @@ class SessionController {
         return res.status(401).json({ error: "Password does not match" });
       }
 
-      // Se chou até aqui o usuário foi encontrado e a senha dele está correta.
+      // Se chegou até aqui o usuário foi encontrado e a senha dele está correta.
 
       const { id, name } = user;
 
