@@ -1,5 +1,6 @@
 import * as Yup from "yup";
-import { startOfHour, parseISO, isBefore } from "date-fns";
+import { startOfHour, parseISO, isAfter } from "date-fns";
+import { zonedTimeToUtc } from "date-fns-tz";
 import Appointment from "../models/Appointments";
 import User from "../models/User";
 import File from "../models/Files";
@@ -62,10 +63,15 @@ class AppointmentController {
           .json({ error: "You can only create appointments with providers" });
       }
 
-      const hourStart = startOfHour(parseISO(date));
+      // Formatando a data.
+      const parsedDate = parseISO(date);
+      // Ajustando o fuso.
+      const znDate = zonedTimeToUtc(parsedDate, "America/Brasilia");
+      // Pegando apenas a hora.
+      const hourStart = startOfHour(znDate);
 
       // Verificando se a data enviada já passou.
-      if (isBefore(hourStart, new Date())) {
+      if (!isAfter(znDate, new Date())) {
         return res.status(400).json({ error: "Past dates are not permitted" });
       }
 
@@ -78,6 +84,7 @@ class AppointmentController {
         },
       });
 
+      // Verificando a disponibilidade da data escolhida.
       if (checkAvailability) {
         return res
           .status(400)
@@ -88,9 +95,10 @@ class AppointmentController {
       const appointment = await Appointment.create({
         user_id: req.userId,
         provider_id,
-        date,
+        date: znDate,
       });
 
+      // A data mostrada no insomnia está errada porem a data armazenada no banco está correta.
       return res.json(appointment);
     } catch (e) {
       console.log(e);
