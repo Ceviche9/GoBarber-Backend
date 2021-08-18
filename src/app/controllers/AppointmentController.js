@@ -1,9 +1,10 @@
 import * as Yup from "yup";
-import { startOfHour, parseISO, isAfter } from "date-fns";
+import { startOfHour, parseISO, isAfter, format } from "date-fns";
 import { zonedTimeToUtc } from "date-fns-tz";
 import Appointment from "../models/Appointments";
 import User from "../models/User";
 import File from "../models/Files";
+import Notification from "../Schemas/Notification";
 
 // Controller responsável para fazer o agendamento com algum barbeiro.
 class AppointmentController {
@@ -97,11 +98,23 @@ class AppointmentController {
           .json({ error: "Appointment date is not available" });
       }
 
+      // Pegando os dados do usuário.
+      const user = await User.findByPk(req.userId);
+
+      // Para formatar a data.
+      const formattedDate = format(hourStart, "'MMMM' 'dd' ,at 'H:mm'h");
+
       // Armazenando os dados no banco.
       const appointment = await Appointment.create({
         user_id: req.userId,
         provider_id,
         date: znDate,
+      });
+
+      // Notificar o prestador de serviço
+      await Notification.create({
+        content: `New Appointment: ${user.name}, ${formattedDate}`,
+        user: provider_id,
       });
 
       // A data mostrada no insomnia está errada porem a data armazenada no banco está correta.
