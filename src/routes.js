@@ -10,6 +10,7 @@ import { SessionController } from "./app/controllers/SessionController";
 import { FileController } from "./app/controllers/fileController";
 import { ProviderController } from "./app/controllers/ProviderController";
 import { AppointmentController } from "./app/controllers/AppointmentController";
+import { ScheduleController } from "./app/controllers/ScheduleController";
 
 import { AuthMiddleware } from "./app/Middleware/auth";
 
@@ -19,6 +20,7 @@ const sessionController = new SessionController();
 const fileController = new FileController();
 const providerController = new ProviderController();
 const appointmentController = new AppointmentController();
+const scheduleController = new ScheduleController();
 
 const routes = Router();
 const upload = multer(multerConfig);
@@ -37,6 +39,9 @@ routes.get("/providers", AuthMiddleware, providerController.index);
 // Appointments
 routes.get("/appointments", AuthMiddleware, appointmentController.index);
 routes.post("/appointments", AuthMiddleware, appointmentController.store);
+
+// Schedule -> As rotas do prestador de serviços.
+routes.get("/schedule", AuthMiddleware, scheduleController.index);
 
 //Files
 routes.post(
