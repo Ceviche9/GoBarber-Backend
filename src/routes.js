@@ -9,7 +9,7 @@ import { UserController } from "./app/controllers/UserController";
 import { SessionController } from "./app/controllers/SessionController";
 import { FileController } from "./app/controllers/fileController";
 import { ProviderController } from "./app/controllers/ProviderController";
-import { AppointmentController } from "./app/controllers/AppointmentCotroller";
+import { AppointmentController } from "./app/controllers/AppointmentController";
 
 import { AuthMiddleware } from "./app/Middleware/auth";
 
