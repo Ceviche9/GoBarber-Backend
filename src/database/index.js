@@ -1,18 +1,17 @@
 import Sequelize from "sequelize";
-import mongoose from "mongoose";
 
 import databaseConfig from "../config/database";
 
 import User from "../app/models/User";
 import Files from "../app/models/Files";
 import Appointments from "../app/models/Appointments";
+import Notifications from "../app/models/Notifications";
 
-const models = [User, Files, Appointments];
+const models = [User, Files, Appointments, Notifications];
 
 class Database {
   constructor() {
     this.init();
-    this.mongo();
   }
 
   init() {
@@ -23,23 +22,6 @@ class Database {
       .map(
         (model) => model.associate && model.associate(this.connection.models)
       );
-  }
-
-  // Conectando com o Mongo.
-  async mongo() {
-    try {
-      this.mongoConnection = await mongoose.connect(
-        "mongodb://localhost:27017/gobarber",
-        {
-          useNewUrlParser: true,
-          useFindAndModify: true,
-          useUnifiedTopology: true,
-        }
-      );
-    } catch (e) {
-      console.log(e);
-      return;
-    }
   }
 }
 

@@ -4,7 +4,7 @@ import { zonedTimeToUtc } from "date-fns-tz";
 import Appointment from "../models/Appointments";
 import User from "../models/User";
 import File from "../models/Files";
-import Notification from "../Schemas/Notification";
+import Notification from "../models/Notifications";
 
 // Controller responsável para fazer o agendamento com algum barbeiro.
 class AppointmentController {
@@ -111,10 +111,12 @@ class AppointmentController {
         date: znDate,
       });
 
+      console.log("CHEGUEI AQUI");
+
       // Notificar o prestador de serviço
-      await Notification.create({
+      const notification = await Notification.create({
         content: `New Appointment: ${user.name}, ${formattedDate}`,
-        user: provider_id,
+        notification_owner: provider_id,
       });
 
       // A data mostrada no insomnia está errada porem a data armazenada no banco está correta.
