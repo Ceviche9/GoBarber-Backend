@@ -87,7 +87,7 @@ class AppointmentController {
         where: {
           provider_id,
           canceled_at: null,
-          date: hourStart,
+          date: znDate,
         },
       });
 
@@ -104,7 +104,6 @@ class AppointmentController {
       // Para formatar a data.
       const formattedMonth = format(hourStart, "MMMM");
       const formattedDay = format(hourStart, "dd");
-      const formattedDate = format(hourStart, "H:mm");
 
       // Armazenando os dados no banco.
       const appointment = await Appointment.create({
@@ -113,11 +112,9 @@ class AppointmentController {
         date: znDate,
       });
 
-      console.log("CHEGUEI AQUI");
-
       // Notificar o prestador de serviço
       const notification = await Notification.create({
-        content: `New Appointment: ${user.name}, ${formattedMonth} ${formattedDay}, at ${formattedDate} `,
+        content: `New Appointment: ${user.name}, ${formattedMonth} ${formattedDay}`,
         notification_owner: provider_id,
       });
 
