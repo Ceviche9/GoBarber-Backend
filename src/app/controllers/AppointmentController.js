@@ -8,10 +8,13 @@ import {
   subHours,
 } from 'date-fns';
 import { zonedTimeToUtc } from 'date-fns-tz';
+
 import Appointment from '../models/Appointments';
 import User from '../models/User';
 import File from '../models/Files';
 import Notification from '../models/Notifications';
+
+import Mail from '../../lib/Mail';
 
 // Controller responsável para fazer o agendamento com algum barbeiro.
 class AppointmentController {
@@ -142,7 +145,15 @@ class AppointmentController {
 
   async delete(req, res) {
     try {
-      const appointment = await Appointment.findByPk(req.params.id);
+      const appointment = await Appointment.findByPk(req.params.id, {
+        include: [
+          {
+            model: User,
+            as: 'provider',
+            attributes: ['name', 'email'],
+          },
+        ],
+      });
 
       if (appointment.user_id !== req.userId) {
         return res.status(401).json({
@@ -161,6 +172,12 @@ class AppointmentController {
       appointment.canceled_at = new Date();
 
       await appointment.save();
+
+      await Mail.sendMail({
+        to: `${appointment.provider.name} < ${appointment.provider.email} >`,
+        subject: 'Appointment Canceled',
+        text: 'You have a canceled appointment',
+      });
 
       return res.json(appointment);
     } catch (e) {
