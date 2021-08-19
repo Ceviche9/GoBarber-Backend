@@ -1,19 +1,19 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable quotes */
-import { Router } from "express";
+import { Router } from 'express';
 
-import multer from "multer";
-import multerConfig from "./config/multer";
+import multer from 'multer';
+import multerConfig from './config/multer';
 
-import { UserController } from "./app/controllers/UserController";
-import { SessionController } from "./app/controllers/SessionController";
-import { FileController } from "./app/controllers/fileController";
-import { ProviderController } from "./app/controllers/ProviderController";
-import { AppointmentController } from "./app/controllers/AppointmentController";
-import { ScheduleController } from "./app/controllers/ScheduleController";
-import { NotificationController } from "./app/controllers/NotificationController";
+import { UserController } from './app/controllers/UserController';
+import { SessionController } from './app/controllers/SessionController';
+import { FileController } from './app/controllers/fileController';
+import { ProviderController } from './app/controllers/ProviderController';
+import { AppointmentController } from './app/controllers/AppointmentController';
+import { ScheduleController } from './app/controllers/ScheduleController';
+import { NotificationController } from './app/controllers/NotificationController';
 
-import { AuthMiddleware } from "./app/Middleware/auth";
+import { AuthMiddleware } from './app/Middleware/auth';
 
 // Controllers
 const userController = new UserController();
@@ -28,32 +28,37 @@ const routes = Router();
 const upload = multer(multerConfig);
 
 // Session
-routes.post("/session", sessionController.store);
+routes.post('/session', sessionController.store);
 
 // Users
-routes.post("/users", userController.store);
+routes.post('/users', userController.store);
 // Dessa linha para baixo usa O AUTHMIDDLEWARE
-routes.put("/users", AuthMiddleware, userController.update);
+routes.put('/users', AuthMiddleware, userController.update);
 
 // Providers
-routes.get("/providers", AuthMiddleware, providerController.index);
+routes.get('/providers', AuthMiddleware, providerController.index);
 
 // Appointments
-routes.get("/appointments", AuthMiddleware, appointmentController.index);
-routes.post("/appointments", AuthMiddleware, appointmentController.store);
+routes.get('/appointments', AuthMiddleware, appointmentController.index);
+routes.post('/appointments', AuthMiddleware, appointmentController.store);
+routes.delete(
+  '/appointments/:id',
+  AuthMiddleware,
+  appointmentController.delete
+);
 
 // Schedule -> As rotas do prestador de serviços.
-routes.get("/schedule", AuthMiddleware, scheduleController.index);
+routes.get('/schedule', AuthMiddleware, scheduleController.index);
 
 // Notificações
-routes.get("/notifications", AuthMiddleware, notificationController.index);
-routes.put("/notifications/:id", AuthMiddleware, notificationController.update);
+routes.get('/notifications', AuthMiddleware, notificationController.index);
+routes.put('/notifications/:id', AuthMiddleware, notificationController.update);
 
 // Files
 routes.post(
-  "/files",
+  '/files',
   AuthMiddleware,
-  upload.single("file"),
+  upload.single('file'),
   fileController.store
 );
 

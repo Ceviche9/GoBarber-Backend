@@ -1,10 +1,17 @@
-import * as Yup from "yup";
-import { startOfHour, parseISO, isAfter, format } from "date-fns";
-import { zonedTimeToUtc } from "date-fns-tz";
-import Appointment from "../models/Appointments";
-import User from "../models/User";
-import File from "../models/Files";
-import Notification from "../models/Notifications";
+import * as Yup from 'yup';
+import {
+  startOfHour,
+  parseISO,
+  isAfter,
+  isBefore,
+  format,
+  subHours,
+} from 'date-fns';
+import { zonedTimeToUtc } from 'date-fns-tz';
+import Appointment from '../models/Appointments';
+import User from '../models/User';
+import File from '../models/Files';
+import Notification from '../models/Notifications';
 
 // Controller responsável para fazer o agendamento com algum barbeiro.
 class AppointmentController {
@@ -16,9 +23,9 @@ class AppointmentController {
     const appointment = await Appointment.findAll({
       where: { user_id: req.userId, canceled_at: null },
       // ordenando por data.
-      order: ["date"],
+      order: ['date'],
       // Escolhendo os atributos.
-      attributes: ["id", "date"],
+      attributes: ['id', 'date'],
       // limitando o numero de agendamentos por pagina.
       limit: 20,
       // lógica de paginação.
@@ -27,13 +34,13 @@ class AppointmentController {
       include: [
         {
           model: User,
-          as: "provider",
-          attributes: ["id", "name"],
+          as: 'provider',
+          attributes: ['id', 'name'],
           include: [
             {
               model: File,
-              as: "avatar",
-              attributes: ["id", "path", "url"],
+              as: 'avatar',
+              attributes: ['id', 'path', 'url'],
             },
           ],
         },
@@ -52,7 +59,7 @@ class AppointmentController {
 
     // Verificando se os dados enviados estão corretos.
     if (!schema.isValid(req.body)) {
-      return res.status(400).json({ error: "Validation fail " });
+      return res.status(400).json({ error: 'Validation fail ' });
     }
 
     try {
@@ -60,7 +67,7 @@ class AppointmentController {
 
       if (req.userId === provider_id) {
         return res.status(401).json({
-          error: "You cant make a appointment with yourself",
+          error: 'You cant make a appointment with yourself',
         });
       }
 
@@ -73,19 +80,19 @@ class AppointmentController {
       if (!isProvider) {
         return res
           .status(401)
-          .json({ error: "You can only create appointments with providers" });
+          .json({ error: 'You can only create appointments with providers' });
       }
 
       // Formatando a data.
       const parsedDate = parseISO(date);
       // Ajustando o fuso.
-      const znDate = zonedTimeToUtc(parsedDate, "America/Brasilia");
+      const znDate = zonedTimeToUtc(parsedDate, 'America/Brasilia');
       // Pegando apenas a hora.
       const hourStart = startOfHour(znDate);
 
       // Verificando se a data enviada já passou.
       if (!isAfter(znDate, new Date())) {
-        return res.status(400).json({ error: "Past dates are not permitted" });
+        return res.status(400).json({ error: 'Past dates are not permitted' });
       }
 
       // Verificando se a data enviada está disponível
@@ -101,15 +108,15 @@ class AppointmentController {
       if (checkAvailability) {
         return res
           .status(400)
-          .json({ error: "Appointment date is not available" });
+          .json({ error: 'Appointment date is not available' });
       }
 
       // Pegando os dados do usuário.
       const user = await User.findByPk(req.userId);
 
       // Para formatar a data.
-      const formattedMonth = format(hourStart, "MMMM");
-      const formattedDay = format(hourStart, "dd");
+      const formattedMonth = format(hourStart, 'MMMM');
+      const formattedDay = format(hourStart, 'dd');
 
       // Armazenando os dados no banco.
       const appointment = await Appointment.create({
@@ -129,7 +136,36 @@ class AppointmentController {
       return res.json(appointment);
     } catch (e) {
       console.log(e);
-      return res.json({ error: "ERROR" });
+      return res.json({ error: 'ERROR' });
+    }
+  }
+
+  async delete(req, res) {
+    try {
+      const appointment = await Appointment.findByPk(req.params.id);
+
+      if (appointment.user_id !== req.userId) {
+        return res.status(401).json({
+          error: "you don't have permission to cancel this appointment",
+        });
+      }
+
+      const dateWithSub = subHours(appointment.date, 2);
+
+      if (isBefore(dateWithSub, new Date())) {
+        return res.status(401).json({
+          error: 'You can only cancel appointments 2 hours in advance',
+        });
+      }
+
+      appointment.canceled_at = new Date();
+
+      await appointment.save();
+
+      return res.json(appointment);
+    } catch (e) {
+      console.log(e);
+      return res.json({ error: 'Error' });
     }
   }
 }
