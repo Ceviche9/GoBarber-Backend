@@ -102,7 +102,9 @@ class AppointmentController {
       const user = await User.findByPk(req.userId);
 
       // Para formatar a data.
-      const formattedDate = format(hourStart, "'MMMM' 'dd' ,at 'H:mm'h");
+      const formattedMonth = format(hourStart, "MMMM");
+      const formattedDay = format(hourStart, "dd");
+      const formattedDate = format(hourStart, "H:mm");
 
       // Armazenando os dados no banco.
       const appointment = await Appointment.create({
@@ -115,7 +117,7 @@ class AppointmentController {
 
       // Notificar o prestador de serviço
       const notification = await Notification.create({
-        content: `New Appointment: ${user.name}, ${formattedDate}`,
+        content: `New Appointment: ${user.name}, ${formattedMonth} ${formattedDay}, at ${formattedDate} `,
         notification_owner: provider_id,
       });
 
