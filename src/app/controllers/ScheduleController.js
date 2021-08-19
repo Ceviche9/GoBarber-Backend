@@ -30,8 +30,8 @@ class ScheduleController {
         // Para selecionar todos os agendamentos do dia que o barbeiro selecionou.
         date: {
           [Op.between]: [
-            startOfDay(zonedTimeToUtc(parsedDate, "America/Brasilia")),
-            endOfDay(zonedTimeToUtc(parsedDate, "America/Brasilia")),
+            startOfDay(znDate, "America/Brasilia"),
+            endOfDay(znDate, "America/Brasilia"),
           ],
         },
       },

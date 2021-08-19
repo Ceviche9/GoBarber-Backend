@@ -1,5 +1,6 @@
-import * as yup from "yup";
-import User from "../models/User";
+/* eslint-disable no-unused-expressions */
+import * as yup from 'yup';
+import User from '../models/User';
 
 // Controller do usuário.
 class UserController {
@@ -13,7 +14,7 @@ class UserController {
 
     //  Verificando se todos os dados são válidos.
     if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ error: "Validation fail" });
+      return res.status(400).json({ error: 'Validation fail' });
     }
 
     try {
@@ -23,7 +24,7 @@ class UserController {
       });
 
       if (userExist) {
-        return res.status(400).json({ error: "User already exists" });
+        return res.status(400).json({ error: 'User already exists' });
       }
 
       const { id, name, email, provider } = await User.create(req.body);
@@ -35,8 +36,8 @@ class UserController {
         provider,
       });
     } catch (e) {
-      res.json({ error: "Unexpected Error" });
-      return console.log("Erro");
+      res.json({ error: 'Unexpected Error' });
+      return console.log('Erro');
     }
   }
 
@@ -51,22 +52,22 @@ class UserController {
       password: yup
         .string()
         .min(6)
-        .when("oldPassword", (oldPassword, field) =>
+        .when('oldPassword', (oldPassword, field) =>
           oldPassword ? field.required() : field
         ),
-      confirmPassword: yup.string().when("password", (password, field) => {
+      confirmPassword: yup.string().when('password', (password, field) => {
         // *Não funciona*
         password
           ? field
               .required()
               .schemaMixed()
-              .onOf([yup.ref("password")])
+              .onOf([yup.ref('password')])
           : field;
       }),
     });
 
     if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ error: "Validation fail" });
+      return res.status(400).json({ error: 'Validation fail' });
     }
 
     const { email, oldPassword } = req.body;
@@ -79,21 +80,21 @@ class UserController {
         const userExist = await User.findOne({ where: { email } });
 
         if (userExist) {
-          return res.status(400).json({ error: "User already exists" });
+          return res.status(400).json({ error: 'User already exists' });
         }
       }
 
       // Só altera a senha do usuário caso ele informe a senha antiga dele.
       if (oldPassword && !(await user.checkPassword(oldPassword))) {
-        return res.status(401).json({ error: "Password does not match" });
+        return res.status(401).json({ error: 'Password does not match' });
       }
 
       const { id, name, provider } = user.update(req.body);
 
-      return res.json({ message: "Update succeeded" });
+      return res.json({ message: 'Update succeeded' });
     } catch (e) {
       console.log(e);
-      return res.json({ error: "unexpected error" });
+      return res.json({ error: 'unexpected error' });
     }
   }
 }

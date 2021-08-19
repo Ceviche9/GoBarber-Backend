@@ -1,5 +1,5 @@
-import Notifications from "../models/Notifications";
-import User from "../models/User";
+import Notifications from '../models/Notifications';
+import User from '../models/User';
 
 class NotificationController {
   async index(req, res) {
@@ -11,7 +11,7 @@ class NotificationController {
     if (!checkIsProvider) {
       return res
         .json(401)
-        .json({ error: "Only providers can load notifications" });
+        .json({ error: 'Only providers can load notifications' });
     }
 
     // Procurando as notificações do prestador de serviços.
@@ -22,11 +22,13 @@ class NotificationController {
     return res.json(notifications);
   }
 
+  // Para colocar uma notificação como lida.
   async update(req, res) {
     const notification = await Notifications.findOne({
       where: { id: req.params.id },
     });
 
+    // Atualizando o estado da notificação.
     const setRead = await Notifications.update(
       { read: true },
       { where: { read: false } }

@@ -1,4 +1,5 @@
+/* eslint-disable key-spacing */
 export default {
-  secret:'ewqwrr23ttregfdgfwef2ereff23rfwe',
+  secret: 'ewqwrr23ttregfdgfwef2ereff23rfwe',
   expiresIn: '7d',
 };

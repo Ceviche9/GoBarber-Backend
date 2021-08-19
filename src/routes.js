@@ -1,9 +1,9 @@
+/* eslint-disable comma-dangle */
+/* eslint-disable quotes */
 import { Router } from "express";
 
 import multer from "multer";
 import multerConfig from "./config/multer";
-
-import User from "./app/models/User";
 
 import { UserController } from "./app/controllers/UserController";
 import { SessionController } from "./app/controllers/SessionController";
@@ -49,7 +49,7 @@ routes.get("/schedule", AuthMiddleware, scheduleController.index);
 routes.get("/notifications", AuthMiddleware, notificationController.index);
 routes.put("/notifications/:id", AuthMiddleware, notificationController.update);
 
-//Files
+// Files
 routes.post(
   "/files",
   AuthMiddleware,
