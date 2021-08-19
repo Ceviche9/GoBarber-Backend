@@ -47,6 +47,7 @@ routes.get("/schedule", AuthMiddleware, scheduleController.index);
 
 // Notificações
 routes.get("/notifications", AuthMiddleware, notificationController.index);
+routes.put("/notifications/:id", AuthMiddleware, notificationController.update);
 
 //Files
 routes.post(

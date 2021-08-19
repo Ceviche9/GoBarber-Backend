@@ -17,10 +17,22 @@ class NotificationController {
     // Procurando as notificações do prestador de serviços.
     const notifications = await Notifications.findAll({
       where: { notification_owner: req.userId },
-      attributes: ["content"],
     });
 
     return res.json(notifications);
+  }
+
+  async update(req, res) {
+    const notification = await Notifications.findOne({
+      where: { id: req.params.id },
+    });
+
+    const setRead = await Notifications.update(
+      { read: true },
+      { where: { read: false } }
+    );
+
+    return res.json(notification);
   }
 }
 

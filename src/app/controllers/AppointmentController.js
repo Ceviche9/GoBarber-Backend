@@ -122,6 +122,7 @@ class AppointmentController {
       const notification = await Notification.create({
         content: `New Appointment: ${user.name}, ${formattedMonth} ${formattedDay}`,
         notification_owner: provider_id,
+        read: false,
       });
 
       // A data mostrada no insomnia está errada porem a data armazenada no banco está correta.

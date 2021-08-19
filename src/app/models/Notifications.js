@@ -6,6 +6,7 @@ class Notifications extends Model {
       {
         notification_owner: Sequelize.INTEGER,
         content: Sequelize.STRING,
+        read: Sequelize.BOOLEAN,
       },
       {
         sequelize,
