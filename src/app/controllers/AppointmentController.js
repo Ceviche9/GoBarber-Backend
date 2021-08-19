@@ -112,7 +112,7 @@ class AppointmentController {
         date: znDate,
       });
 
-      // Notificar o prestador de serviço
+      // Criar e armazenar uma notificação para o prestador de serviços.
       const notification = await Notification.create({
         content: `New Appointment: ${user.name}, ${formattedMonth} ${formattedDay}`,
         notification_owner: provider_id,
