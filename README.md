@@ -1,9 +1,7 @@
-## 💇🏻‍♂️ About the project
+## 🪒 About the project
 
 This api provides everything needed to organize appointments between the barbers and customers.
-
 Customers can choose the best time available to them.
-
 Providers can see all their appointments, manage the times, also see if one client canceled the schedule.
 
 ## 🚀 Technologies
