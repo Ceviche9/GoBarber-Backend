@@ -14,7 +14,8 @@ import User from '../models/User';
 import File from '../models/Files';
 import Notification from '../models/Notifications';
 
-import Mail from '../../lib/Mail';
+import cancellationMail from '../Jobs/cancellationMail';
+import Queue from '../../lib/Queue';
 
 // Controller responsável para fazer o agendamento com algum barbeiro.
 class AppointmentController {
@@ -185,11 +186,10 @@ class AppointmentController {
       // Salvando no banco.
       await appointment.save();
 
-      // Enviando um email para o prestador de serviços alertando que um agendamento foi cancelado.
-      await Mail.sendMail({
-        to: `${appointment.provider.name} < ${appointment.provider.email} >`,
-        subject: 'Appointment Canceled',
-        text: `You have a cancelled appointment with -${appointment.user.name}-, please checkout your dashboard`,
+      // Para colocar em fila a função de enviar o email.
+      // O email contem um aviso ao prestador de serviço dizendo que um agendamento foi cancelado.
+      await Queue.add(cancellationMail.key, {
+        appointment,
       });
 
       return res.json(appointment);
