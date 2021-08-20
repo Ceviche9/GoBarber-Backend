@@ -143,8 +143,10 @@ class AppointmentController {
     }
   }
 
+  // Para o usuário cancelar um agendamento.
   async delete(req, res) {
     try {
+      // Para encontrar o agendamento.
       const appointment = await Appointment.findByPk(req.params.id, {
         include: [
           {
@@ -155,24 +157,30 @@ class AppointmentController {
         ],
       });
 
+      // Apenas o usuário que criou o agendamento pode cancela-lo.
       if (appointment.user_id !== req.userId) {
         return res.status(401).json({
           error: "you don't have permission to cancel this appointment",
         });
       }
 
+      // Para diminuir duas horas do horário do agendamento.
       const dateWithSub = subHours(appointment.date, 2);
 
+      // O usuário só pode cancelar um agendamento no mínimo com duas horas de antecedência.
       if (isBefore(dateWithSub, new Date())) {
         return res.status(401).json({
           error: 'You can only cancel appointments 2 hours in advance',
         });
       }
 
+      // Definindo o horário em que o agendamento foi cancelado.
       appointment.canceled_at = new Date();
 
+      // Salvando no banco.
       await appointment.save();
 
+      // Enviando um email para o prestador de serviços alertando que um agendamento foi cancelado.
       await Mail.sendMail({
         to: `${appointment.provider.name} < ${appointment.provider.email} >`,
         subject: 'Appointment Canceled',
