@@ -12,6 +12,7 @@ import { ProviderController } from './app/controllers/ProviderController';
 import { AppointmentController } from './app/controllers/AppointmentController';
 import { ScheduleController } from './app/controllers/ScheduleController';
 import { NotificationController } from './app/controllers/NotificationController';
+import { AvailableController } from './app/controllers/AvailableController';
 
 import { AuthMiddleware } from './app/Middleware/auth';
 
@@ -23,6 +24,7 @@ const providerController = new ProviderController();
 const appointmentController = new AppointmentController();
 const scheduleController = new ScheduleController();
 const notificationController = new NotificationController();
+const availableController = new AvailableController();
 
 const routes = Router();
 const upload = multer(multerConfig);
@@ -37,6 +39,11 @@ routes.put('/users', AuthMiddleware, userController.update);
 
 // Providers
 routes.get('/providers', AuthMiddleware, providerController.index);
+routes.get(
+  '/providers/:providerId/available',
+  AuthMiddleware,
+  availableController.index
+);
 
 // Appointments
 routes.get('/appointments', AuthMiddleware, appointmentController.index);
