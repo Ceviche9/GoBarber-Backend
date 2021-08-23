@@ -13,6 +13,7 @@ class Mail {
     });
   }
 
+  // Método para enviar o email.
   sendMail(message) {
     return this.transporter.sendMail({
       ...mailConfig.default,
