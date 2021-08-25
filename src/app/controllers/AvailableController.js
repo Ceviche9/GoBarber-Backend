@@ -15,14 +15,18 @@ import Appointments from '../models/Appointments';
 class AvailableController {
   async index(req, res) {
     try {
+      // Para pegar a data enviada pelo o usuário.
       const { date } = req.query;
 
+      // Verificando se a data foi enviada ou se ela é válida.
       if (!date) {
         return res.status(400).json({ error: 'Invalid date' });
       }
 
+      // Transformando a data em um number.
       const searchDate = Number(date);
 
+      // Para encontrar todos os agendamentos que existem no dia solicitado pelo usuário.
       const appointments = await Appointments.findAll({
         where: {
           provider_id: req.params.providerId,
@@ -36,6 +40,9 @@ class AvailableController {
         },
       });
 
+      console.log('PRIMEIRO CONSOLE', appointments);
+
+      // Horários de serviços.
       const schedule = [
         '08:00', // 2021-09-23 09:30:00 -> formato esperado
         '09:00',
@@ -51,12 +58,15 @@ class AvailableController {
         '20:00',
       ];
 
+      //
       const available = schedule.map((time) => {
         const [hour, minute] = time.split(':');
         const value = setSeconds(
           setMinutes(setHours(searchDate, hour), minute),
           0
         );
+
+        console.log('SEGUNDO CONSOLE', available);
 
         return {
           time,
