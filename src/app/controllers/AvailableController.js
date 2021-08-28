@@ -40,8 +40,6 @@ class AvailableController {
         },
       });
 
-      console.log('PRIMEIRO CONSOLE', appointments);
-
       // Horários de serviços.
       const schedule = [
         '08:00', // 2021-09-23 09:30:00 -> formato esperado
@@ -65,8 +63,6 @@ class AvailableController {
           0
         );
 
-        console.log('SEGUNDO CONSOLE', available);
-
         return {
           time,
           value: format(value, "yyyy-MM-dd'T'HH:mm:ssxxx"),
@@ -75,6 +71,8 @@ class AvailableController {
             !appointments.find((a) => format(a.date, 'HH:mm')) === time,
         };
       });
+
+      console.log(available);
 
       return res.json(available);
     } catch (e) {
