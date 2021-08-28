@@ -31,10 +31,9 @@ const upload = multer(multerConfig);
 
 // Session
 routes.post('/session', sessionController.store);
-
 // Users
 routes.post('/users', userController.store);
-// Dessa linha para baixo usa O AUTHMIDDLEWARE
+//  ---AUTHMIDDLEWARE----
 routes.put('/users', AuthMiddleware, userController.update);
 
 // Providers

@@ -58,7 +58,6 @@ class AvailableController {
         '20:00',
       ];
 
-      // test
       const available = schedule.map((time) => {
         const [hour, minute] = time.split(':');
         const value = setSeconds(
