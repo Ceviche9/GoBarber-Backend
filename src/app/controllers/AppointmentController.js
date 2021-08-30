@@ -28,8 +28,8 @@ class AppointmentController {
       where: { user_id: req.userId, canceled_at: null },
       // ordenando por data.
       order: ['date'],
-      // Escolhendo os atributos.
-      attributes: ['id', 'date'],
+      // Escolhendo os atributos que serão mostrados.
+      attributes: ['id', 'date', 'past', 'cancelable'],
       // limitando o numero de agendamentos por pagina.
       limit: 20,
       // lógica de paginação.
