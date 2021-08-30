@@ -8,7 +8,7 @@ import {
   format,
   isAfter,
 } from 'date-fns';
-import { DATE, Op } from 'sequelize';
+import { Op } from 'sequelize';
 import Appointments from '../models/Appointments';
 
 // Para verificar a disponibilidade do prestador de serviços.
@@ -32,10 +32,7 @@ class AvailableController {
           provider_id: req.params.providerId,
           canceled_at: null,
           date: {
-            [Op.between]: [
-              startOfDay(searchDate, 'America/Brasilia'),
-              endOfDay(searchDate, 'America/Brasilia'),
-            ],
+            [Op.between]: [startOfDay(searchDate), endOfDay(searchDate)],
           },
         },
       });
@@ -67,12 +64,10 @@ class AvailableController {
           time,
           value: format(value, "yyyy-MM-dd'T'HH:mm:ssxxx"),
           available:
-            isAfter(value, new DATE()) &&
-            !appointments.find((a) => format(a.date, 'HH:mm')) === time,
+            isAfter(value, new Date()) &&
+            !appointments.find((a) => format(a.date, 'HH:mm') === time)
         };
       });
-
-      console.log(available);
 
       return res.json(available);
     } catch (e) {
